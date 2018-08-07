@@ -20,7 +20,7 @@ namespace WebStress.Controllers
 
                 byte[] hash = new byte[32];
                 System.Security.Cryptography.RandomNumberGenerator.Create().GetBytes(hash);
-                for (int i = 0; i < (256*1024); i++)
+                for (int i = 0; i < (256*Repeats); i++)
                 {
                     hash = sha1.ComputeHash(hash);
                 }
@@ -29,6 +29,21 @@ namespace WebStress.Controllers
             var ts = DateTime.Now - start;
 
             return string.Format("execution time: {0}ms", ts.TotalMilliseconds);
+        }
+
+        public int Repeats
+        {
+            get
+            {
+                int ret = 1024;
+                var tmp = Environment.GetEnvironmentVariable("CYCLECOUNT");
+                var b = int.TryParse(tmp, out ret);
+                if(!b || ret <= 0)
+                {
+                    ret = 1024;
+                }
+                return ret;
+            }
         }
     }
 }
