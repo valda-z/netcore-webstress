@@ -9,36 +9,26 @@ namespace WebStress.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("/")]
+        public string Probe()
         {
-            return new string[] { "value1", "value2" };
-        }
+            DateTime start = DateTime.Now;
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+            {
+                var sha1 = System.Security.Cryptography.SHA1.Create();
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
+                byte[] hash = new byte[32];
+                System.Security.Cryptography.RandomNumberGenerator.Create().GetBytes(hash);
+                for (int i = 0; i < (256*1024); i++)
+                {
+                    hash = sha1.ComputeHash(hash);
+                }
+            }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
+            var ts = DateTime.Now - start;
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return string.Format("execution time: {0}ms", ts.TotalMilliseconds);
         }
     }
 }
