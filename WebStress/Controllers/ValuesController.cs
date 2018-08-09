@@ -20,7 +20,7 @@ namespace WebStress.Controllers
 
                 byte[] hash = new byte[32];
                 System.Security.Cryptography.RandomNumberGenerator.Create().GetBytes(hash);
-                for (int i = 0; i < (256*Repeats); i++)
+                for (int i = 0; i < (8); i++)
                 {
                     hash = sha1.ComputeHash(hash);
                 }
@@ -30,6 +30,29 @@ namespace WebStress.Controllers
 
             return string.Format("execution time: {0}ms", ts.TotalMilliseconds);
         }
+
+        [HttpGet]
+        [Route("/perf")]
+        public string Perf()
+        {
+            DateTime start = DateTime.Now;
+
+            {
+                var sha1 = System.Security.Cryptography.SHA1.Create();
+
+                byte[] hash = new byte[32];
+                System.Security.Cryptography.RandomNumberGenerator.Create().GetBytes(hash);
+                for (int i = 0; i < (256 * Repeats); i++)
+                {
+                    hash = sha1.ComputeHash(hash);
+                }
+            }
+
+            var ts = DateTime.Now - start;
+
+            return string.Format("execution time: {0}ms", ts.TotalMilliseconds);
+        }
+
 
         public int Repeats
         {
