@@ -30,8 +30,8 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://localhost:{ServicePort}/api/values",
       "environmentVariables": {
-        "COSMOSURI": "https://csastemp0123.documents.azure.com:443/",
-        "COSMOSKEY": "1QwhexkUVHkF46AekHF6Qpwa1zZYN8Q404juQmT0vXvjqsEK9vUFJ8401h9z6nUe4pdupKZxgSQeWyufxt145Q=="
+        "COSMOSURI": "##",
+        "COSMOSKEY": "##"
       }
     }
   }
