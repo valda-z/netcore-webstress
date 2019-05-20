@@ -1,8 +1,12 @@
-FROM microsoft/aspnetcore:2.0 AS base
-WORKDIR /app
-EXPOSE 80
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+RUN useradd --create-home -s /bin/bash user
+WORKDIR /home/user
+USER user
+ENV APP_HOME /home/user/app
+RUN mkdir $APP_HOME
+EXPOSE 5001
 
-FROM microsoft/aspnetcore-build:2.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
 WORKDIR /src
 COPY ["WebStress/WebStress.csproj", "WebStress/"]
 RUN dotnet restore "WebStress/WebStress.csproj"
@@ -14,6 +18,7 @@ FROM build AS publish
 RUN dotnet publish "WebStress.csproj" -c Release -o /app
 
 FROM base AS final
-WORKDIR /app
+USER user
+WORKDIR $APP_HOME
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "WebStress.dll"]
